@@ -1,0 +1,174 @@
+{
+  "journeys": [
+    {
+      "id": "0700",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "07:00",
+      "arrival": "09:10",
+      "platform": "5",
+      "callingPoints": ["Milton Keynes", "Stoke-on-Trent", "Macclesfield"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 65 },
+        { "type": "off_peak", "class": "standard", "price": 95 },
+        { "type": "anytime", "class": "standard", "price": 180 },
+        { "type": "advance", "class": "first", "price": 120 }
+      ]
+    },
+    {
+      "id": "0720",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "07:20",
+      "arrival": "09:35",
+      "platform": "6",
+      "callingPoints": ["Milton Keynes", "Crewe"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 60 },
+        { "type": "off_peak", "class": "standard", "price": 90 },
+        { "type": "anytime", "class": "standard", "price": 180 },
+        { "type": "advance", "class": "first", "price": 110 }
+      ]
+    },
+    {
+      "id": "0800",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "08:00",
+      "arrival": "10:10",
+      "platform": "7",
+      "callingPoints": ["Milton Keynes", "Stoke-on-Trent"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 55 },
+        { "type": "off_peak", "class": "standard", "price": 85 },
+        { "type": "anytime", "class": "standard", "price": 170 },
+        { "type": "advance", "class": "first", "price": 100 }
+      ]
+    },
+    {
+      "id": "0900",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "09:00",
+      "arrival": "11:10",
+      "platform": "8",
+      "callingPoints": ["Milton Keynes", "Crewe"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 40 },
+        { "type": "off_peak", "class": "standard", "price": 70 },
+        { "type": "anytime", "class": "standard", "price": 150 },
+        { "type": "advance", "class": "first", "price": 75 }
+      ]
+    },
+    {
+      "id": "1000",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "10:00",
+      "arrival": "12:10",
+      "platform": "9",
+      "callingPoints": ["Milton Keynes"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 30 },
+        { "type": "off_peak", "class": "standard", "price": 60 },
+        { "type": "anytime", "class": "standard", "price": 140 },
+        { "type": "advance", "class": "first", "price": 60 }
+      ]
+    },
+    {
+      "id": "1200",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "12:00",
+      "arrival": "14:10",
+      "platform": "10",
+      "callingPoints": [],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 25 },
+        { "type": "off_peak", "class": "standard", "price": 50 },
+        { "type": "anytime", "class": "standard", "price": 130 },
+        { "type": "advance", "class": "first", "price": 50 }
+      ]
+    },
+    {
+      "id": "1400",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "14:00",
+      "arrival": "16:10",
+      "platform": "11",
+      "callingPoints": ["Milton Keynes"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 30 },
+        { "type": "off_peak", "class": "standard", "price": 55 },
+        { "type": "anytime", "class": "standard", "price": 140 },
+        { "type": "advance", "class": "first", "price": 55 }
+      ]
+    },
+    {
+      "id": "1600",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "16:00",
+      "arrival": "18:10",
+      "platform": "12",
+      "callingPoints": ["Milton Keynes", "Stoke-on-Trent"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 50 },
+        { "type": "off_peak", "class": "standard", "price": 80 },
+        { "type": "anytime", "class": "standard", "price": 170 },
+        { "type": "advance", "class": "first", "price": 95 }
+      ]
+    },
+    {
+      "id": "1800",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "18:00",
+      "arrival": "20:10",
+      "platform": "13",
+      "callingPoints": ["Milton Keynes", "Crewe"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 55 },
+        { "type": "off_peak", "class": "standard", "price": 85 },
+        { "type": "anytime", "class": "standard", "price": 170 },
+        { "type": "advance", "class": "first", "price": 100 }
+      ]
+    },
+    {
+      "id": "2020",
+      "origin": "London Euston",
+      "originCode": "EUS",
+      "destination": "Manchester Piccadilly",
+      "destinationCode": "MAN",
+      "departure": "20:20",
+      "arrival": "22:35",
+      "platform": "14",
+      "callingPoints": ["Milton Keynes"],
+      "fares": [
+        { "type": "advance", "class": "standard", "price": 35 },
+        { "type": "off_peak", "class": "standard", "price": 60 },
+        { "type": "anytime", "class": "standard", "price": 130 },
+        { "type": "advance", "class": "first", "price": 70 }
+      ]
+    }
+  ]
+}
