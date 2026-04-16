@@ -8,13 +8,13 @@ import {
 } from "../lib/pricing";
 
 // ✅ Duration helpers
-function getDurationMinutes(dep, arr) {
+function getDurationMinutes(dep: string, arr: string) {
   const [dh, dm] = dep.split(":").map(Number);
   const [ah, am] = arr.split(":").map(Number);
   return (ah * 60 + am) - (dh * 60 + dm);
 }
 
-function formatDuration(mins) {
+function formatDuration(mins: number) {
   const h = Math.floor(mins / 60);
   const m = mins % 60;
   return `${h}h ${m}m`;
