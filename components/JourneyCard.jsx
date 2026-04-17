@@ -85,6 +85,14 @@ export default function JourneyCard({
   const [addAnytime, setAddAnytime] = useState(false);
   const [addFirst, setAddFirst] = useState(false);
 
+  useEffect(() => {
+    if (!selected) {
+      setAddFlex(false);
+      setAddAnytime(false);
+      setAddFirst(false);
+    }
+  }, [selected]);
+
   let activeFareType = "advance";
   if (addAnytime) {
     activeFareType = "anytime";
@@ -117,15 +125,17 @@ export default function JourneyCard({
         addFirst
       });
     }
-  }, [selected, total, activeFareType, addFlex, addAnytime, addFirst]);
+  }, [selected, addFlex, addAnytime, addFirst]); // intentionally excludes parent callback identity
 
   return (
     <div
       style={{
         ...styles.card,
-        border: selected ? "2px solid #2563eb" : "1px solid #d1d5db"
+        border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
       }}
     >
+      <div style={styles.topStripe} />
+
       <div style={styles.row}>
         <div>
           <div style={styles.time}>
@@ -133,7 +143,8 @@ export default function JourneyCard({
           </div>
 
           <div style={styles.route}>
-            {journey.origin} ({journey.originCode}) → {journey.destination} ({journey.destinationCode})
+            {journey.origin} ({journey.originCode}) →{" "}
+            {journey.destination} ({journey.destinationCode})
           </div>
 
           <div style={styles.duration}>{duration}</div>
@@ -157,14 +168,14 @@ export default function JourneyCard({
         </div>
 
         <div style={styles.priceBlock}>
-          {isCheapest && <span style={styles.badge}>Cheapest</span>}
+          {isCheapest && <span style={styles.cheapestBadge}>Cheapest</span>}
           <div style={styles.price} aria-live="polite">
             £{total}
           </div>
         </div>
       </div>
 
-      <div style={styles.base}>
+      <div style={styles.section}>
         {activeFareType === "advance" ? (
           <div style={styles.serviceOnly}>
             ✔ This fare is valid on this train only
@@ -199,8 +210,8 @@ export default function JourneyCard({
         )}
       </div>
 
-      <div style={styles.options}>
-        <strong>Ticket options</strong>
+      <div style={styles.section}>
+        <strong style={styles.sectionTitle}>Ticket options</strong>
 
         {flexFare && (
           <label style={styles.optionRow}>
@@ -213,7 +224,7 @@ export default function JourneyCard({
                 if (newValue) setAddAnytime(false);
               }}
             />
-            +£{flexUpgrade} Add more flexibility (Off-Peak)
+            <span>+£{flexUpgrade} Add more flexibility (Off-Peak)</span>
           </label>
         )}
 
@@ -228,7 +239,7 @@ export default function JourneyCard({
                 if (newValue) setAddFlex(false);
               }}
             />
-            +£{anytimeUpgrade} Upgrade to fully flexible (Anytime)
+            <span>+£{anytimeUpgrade} Upgrade to fully flexible (Anytime)</span>
           </label>
         )}
 
@@ -239,12 +250,12 @@ export default function JourneyCard({
               checked={addFirst}
               onChange={() => setAddFirst(!addFirst)}
             />
-            +£{firstUpgrade} First Class
+            <span>+£{firstUpgrade} First Class</span>
           </label>
         )}
       </div>
 
-      <button onClick={onSelect} style={styles.button}>
+      <button onClick={onSelect} style={styles.selectButton}>
         {selected ? "Selected ✓" : "Select"}
       </button>
 
@@ -264,10 +275,17 @@ export default function JourneyCard({
 
 const styles = {
   card: {
-    background: "#fff",
+    background: "#ffffff",
+    borderRadius: "14px",
+    marginBottom: "20px",
     padding: "20px",
-    borderRadius: "12px",
-    marginBottom: "20px"
+    boxShadow: "0 2px 8px rgba(11, 31, 58, 0.06)"
+  },
+  topStripe: {
+    height: "6px",
+    borderRadius: "8px 8px 0 0",
+    background: "linear-gradient(90deg, #0b1f3a 0%, #2563eb 68%, #d72638 100%)",
+    margin: "-20px -20px 18px -20px"
   },
   row: {
     display: "flex",
@@ -275,87 +293,104 @@ const styles = {
     gap: "16px"
   },
   time: {
-    fontSize: "20px",
-    fontWeight: "600"
+    fontSize: "22px",
+    fontWeight: "800",
+    color: "#0b1f3a"
   },
   route: {
     fontSize: "14px",
-    color: "#1f2937"
+    color: "#334155",
+    marginTop: "4px"
   },
   duration: {
     fontSize: "14px",
-    marginTop: "2px",
-    color: "#374151"
+    marginTop: "4px",
+    color: "#334155"
   },
   meta: {
     fontSize: "13px",
-    marginTop: "4px",
-    color: "#374151"
+    marginTop: "6px",
+    color: "#334155"
   },
   calls: {
     fontSize: "13px",
     marginTop: "4px",
-    color: "#4b5563"
+    color: "#475569"
   },
   badgeRow: {
     display: "flex",
-    gap: "6px",
-    marginTop: "6px",
+    gap: "8px",
+    marginTop: "8px",
     flexWrap: "wrap"
   },
   fastBadge: {
     background: "#16a34a",
-    color: "white",
+    color: "#ffffff",
     padding: "3px 8px",
-    borderRadius: "6px",
-    fontSize: "12px"
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: "700"
   },
   directBadge: {
     background: "#2563eb",
-    color: "white",
+    color: "#ffffff",
     padding: "3px 8px",
-    borderRadius: "6px",
-    fontSize: "12px"
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: "700"
   },
   fewStopsBadge: {
-    background: "#f59e0b",
-    color: "white",
+    background: "#d72638",
+    color: "#ffffff",
     padding: "3px 8px",
-    borderRadius: "6px",
-    fontSize: "12px"
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: "700"
   },
   priceBlock: {
     textAlign: "right",
-    minWidth: "80px"
+    minWidth: "92px"
   },
   price: {
-    fontSize: "26px",
-    fontWeight: "700"
+    fontSize: "30px",
+    fontWeight: "800",
+    color: "#0b1f3a"
   },
-  badge: {
-    background: "#16a34a",
-    color: "white",
-    padding: "3px 8px",
-    borderRadius: "6px",
+  cheapestBadge: {
+    background: "#d72638",
+    color: "#ffffff",
+    padding: "4px 8px",
+    borderRadius: "999px",
     fontSize: "12px",
+    fontWeight: "700",
     display: "inline-block",
-    marginBottom: "4px"
+    marginBottom: "6px"
   },
-  base: {
-    marginTop: "12px"
+  section: {
+    marginTop: "16px",
+    paddingTop: "16px",
+    borderTop: "1px solid #e2e8f0"
+  },
+  sectionTitle: {
+    display: "block",
+    marginBottom: "8px",
+    color: "#0b1f3a",
+    fontSize: "15px"
   },
   serviceOnly: {
     fontSize: "14px",
-    color: "#16a34a"
+    color: "#0b1f3a",
+    fontWeight: "600"
   },
   validityLabel: {
     fontSize: "14px",
-    color: "#374151"
+    color: "#0b1f3a",
+    fontWeight: "600"
   },
   timelineWrapper: {
     display: "flex",
     gap: "4px",
-    marginTop: "8px",
+    marginTop: "10px",
     flexWrap: "wrap"
   },
   timelineItem: {
@@ -364,41 +399,42 @@ const styles = {
     alignItems: "center"
   },
   block: {
-    width: "20px",
-    height: "14px",
-    borderRadius: "3px"
+    width: "18px",
+    height: "12px",
+    borderRadius: "2px"
   },
   label: {
     fontSize: "12px",
-    color: "#374151"
+    color: "#334155",
+    marginTop: "3px"
   },
   legend: {
     display: "flex",
     gap: "12px",
     fontSize: "12px",
-    marginTop: "6px",
-    color: "#374151"
-  },
-  options: {
-    marginTop: "16px"
+    marginTop: "8px",
+    color: "#334155",
+    flexWrap: "wrap"
   },
   optionRow: {
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    padding: "6px 0",
+    padding: "8px 0",
     cursor: "pointer",
-    fontSize: "14px"
+    fontSize: "14px",
+    color: "#0b1f3a"
   },
-  button: {
-    marginTop: "14px",
+  selectButton: {
+    marginTop: "16px",
     width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
+    padding: "13px",
+    borderRadius: "10px",
     background: "#2563eb",
-    color: "white",
+    color: "#ffffff",
     border: "none",
-    fontWeight: "600",
+    fontWeight: "700",
+    fontSize: "15px",
     cursor: "pointer"
   },
   postSelect: {
@@ -408,17 +444,19 @@ const styles = {
     gap: "10px"
   },
   secondaryButton: {
-    padding: "10px",
-    borderRadius: "8px",
-    border: "2px solid #d1d5db",
-    background: "#fff",
+    padding: "11px",
+    borderRadius: "10px",
+    border: "2px solid #cbd5e1",
+    background: "#ffffff",
+    color: "#0b1f3a",
+    fontWeight: "700",
     cursor: "pointer"
   },
   primaryAction: {
-    padding: "12px",
-    borderRadius: "8px",
-    background: "#111827",
-    color: "white",
+    padding: "13px",
+    borderRadius: "10px",
+    background: "#0b1f3a",
+    color: "#ffffff",
     fontWeight: "700",
     border: "none",
     cursor: "pointer"

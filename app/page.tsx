@@ -8,7 +8,7 @@ import { getCheapestFare } from "../lib/pricing";
 function getDurationMinutes(dep, arr) {
   const [dh, dm] = dep.split(":").map(Number);
   const [ah, am] = arr.split(":").map(Number);
-  return (ah * 60 + am) - (dh * 60 + dm);
+  return ah * 60 + am - (dh * 60 + dm);
 }
 
 function getRestrictionText(activeFareType) {
@@ -21,6 +21,12 @@ function getRestrictionText(activeFareType) {
   }
 
   return "Valid only on the train you selected.";
+}
+
+function getFareLabel(activeFareType) {
+  if (activeFareType === "anytime") return "Anytime";
+  if (activeFareType === "off_peak") return "Off-Peak";
+  return "Advance";
 }
 
 export default function Home() {
@@ -38,42 +44,64 @@ export default function Home() {
   );
 
   if (view === "basket" && selectedJourney) {
-    const restrictionText = getRestrictionText(
-      basketDetails?.activeFareType || "advance"
-    );
+    const activeFareType = basketDetails?.activeFareType || "advance";
+    const restrictionText = getRestrictionText(activeFareType);
 
     return (
-      <div style={styles.container}>
-        <h1>Review your journey</h1>
+      <div style={styles.page}>
+        <div style={styles.shell}>
+          <div style={styles.brandBar}>
+            <div style={styles.brandMark}>⇄</div>
+            <div>
+              <div style={styles.brandTitle}>Great British Railways</div>
+              <div style={styles.brandSub}>Journey review</div>
+            </div>
+          </div>
 
-        <div style={styles.card}>
-          <p>
-            <strong>1 adult travelling</strong>
-          </p>
+          <div style={styles.reviewCard}>
+            <h1 style={styles.pageTitle}>Check your journey</h1>
 
-          <p>
-            {selectedJourney.origin} → {selectedJourney.destination}
-          </p>
+            <div style={styles.reviewSection}>
+              <div style={styles.reviewLabel}>Passenger</div>
+              <div style={styles.reviewValue}>1 adult travelling</div>
+            </div>
 
-          <p>
-            Depart: {selectedJourney.departure}
-            <br />
-            Arrive: {selectedJourney.arrival}
-          </p>
+            <div style={styles.reviewSection}>
+              <div style={styles.reviewLabel}>Route</div>
+              <div style={styles.reviewValue}>
+                {selectedJourney.origin} ({selectedJourney.originCode}) →{" "}
+                {selectedJourney.destination} ({selectedJourney.destinationCode})
+              </div>
+            </div>
 
-          <p style={styles.restrictions}>{restrictionText}</p>
+            <div style={styles.reviewSection}>
+              <div style={styles.reviewLabel}>Service</div>
+              <div style={styles.reviewValue}>
+                {selectedJourney.departure} → {selectedJourney.arrival}
+              </div>
+              <div style={styles.reviewMeta}>Platform {selectedJourney.platform}</div>
+            </div>
 
-          <h2>Total: £{total}</h2>
+            <div style={styles.reviewSection}>
+              <div style={styles.reviewLabel}>Ticket type</div>
+              <div style={styles.reviewValue}>{getFareLabel(activeFareType)}</div>
+              <div style={styles.reviewMeta}>{restrictionText}</div>
+            </div>
 
-          <div style={styles.actions}>
-            <button style={styles.primary}>Continue</button>
+            <div style={styles.reviewSection}>
+              <div style={styles.reviewLabel}>Total price</div>
+              <div style={styles.totalPrice}>£{total}</div>
+            </div>
 
-            <button
-              style={styles.secondary}
-              onClick={() => setView("list")}
-            >
-              Go back
-            </button>
+            <div style={styles.buttonRow}>
+              <button style={styles.primaryButton}>Continue</button>
+              <button
+                style={styles.secondaryButton}
+                onClick={() => setView("list")}
+              >
+                Go back
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -81,78 +109,180 @@ export default function Home() {
   }
 
   return (
-    <div style={styles.container}>
-      <h1>Rail Fare Prototype</h1>
+    <div style={styles.page}>
+      <div style={styles.shell}>
+        <div style={styles.brandBar}>
+          <div style={styles.brandMark}>⇄</div>
+          <div>
+            <div style={styles.brandTitle}>Great British Railways</div>
+            <div style={styles.brandSub}>Journey planner</div>
+          </div>
+        </div>
 
-      {data.journeys.map((journey) => {
-        const basePrice = getCheapestFare(journey.fares).price;
+        <div style={styles.hero}>
+          <h1 style={styles.pageTitle}>London Euston to Manchester Piccadilly</h1>
+          <p style={styles.pageIntro}>
+            Compare fares, flexibility and journey details for Avanti West Coast
+            services.
+          </p>
+        </div>
 
-        return (
-          <JourneyCard
-            key={journey.id}
-            journey={journey}
-            selected={selectedJourney?.id === journey.id}
-            isCheapest={basePrice === cheapestPrice}
-            fastestDuration={fastestDuration}
-            onSelect={() => {
-              setSelectedJourney(journey);
-              setTotal(basePrice);
-              setBasketDetails({
-                total: basePrice,
-                activeFareType: "advance",
-                addFlex: false,
-                addAnytime: false,
-                addFirst: false
-              });
-            }}
-            onPriceChange={(details) => {
-              setTotal(details.total);
-              setBasketDetails(details);
-            }}
-            onContinue={() => setView("basket")}
-          />
-        );
-      })}
+        {data.journeys.map((journey) => {
+          const basePrice = getCheapestFare(journey.fares).price;
+
+          return (
+            <JourneyCard
+              key={journey.id}
+              journey={journey}
+              selected={selectedJourney?.id === journey.id}
+              isCheapest={basePrice === cheapestPrice}
+              fastestDuration={fastestDuration}
+              onSelect={() => {
+                setSelectedJourney(journey);
+                setTotal(basePrice);
+                setBasketDetails({
+                  total: basePrice,
+                  activeFareType: "advance",
+                  addFlex: false,
+                  addAnytime: false,
+                  addFirst: false
+                });
+              }}
+              onPriceChange={(details) => {
+                setTotal(details.total);
+                setBasketDetails(details);
+              }}
+              onContinue={() => setView("basket")}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
 
 const styles = {
-  container: {
-    padding: "20px",
-    background: "#f5f5f5",
-    minHeight: "100vh"
+  page: {
+    minHeight: "100vh",
+    background: "#eef2f7",
+    padding: "24px",
+    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    color: "#0b1f3a"
   },
-  card: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "12px",
-    marginTop: "20px",
-    maxWidth: "700px"
+  shell: {
+    maxWidth: "980px",
+    margin: "0 auto"
   },
-  restrictions: {
-    marginTop: "10px",
-    fontSize: "14px",
-    color: "#374151"
-  },
-  actions: {
-    marginTop: "20px",
+  brandBar: {
     display: "flex",
-    gap: "10px"
+    alignItems: "center",
+    gap: "14px",
+    background: "#0b1f3a",
+    color: "#ffffff",
+    padding: "14px 18px",
+    borderRadius: "12px 12px 0 0",
+    borderBottom: "6px solid #d72638"
   },
-  primary: {
-    padding: "12px",
-    background: "#111827",
-    color: "white",
-    border: "none",
+  brandMark: {
+    width: "40px",
+    height: "40px",
     borderRadius: "8px",
+    background: "#ffffff",
+    color: "#0b1f3a",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "800",
+    fontSize: "20px"
+  },
+  brandTitle: {
+    fontSize: "18px",
+    fontWeight: "700",
+    lineHeight: 1.2
+  },
+  brandSub: {
+    fontSize: "13px",
+    opacity: 0.9,
+    marginTop: "2px"
+  },
+  hero: {
+    background: "#ffffff",
+    padding: "22px 24px",
+    borderLeft: "1px solid #d7deea",
+    borderRight: "1px solid #d7deea",
+    borderBottom: "1px solid #d7deea",
+    marginBottom: "18px"
+  },
+  pageTitle: {
+    margin: 0,
+    fontSize: "30px",
+    lineHeight: 1.15,
+    color: "#0b1f3a"
+  },
+  pageIntro: {
+    marginTop: "8px",
+    marginBottom: 0,
+    fontSize: "16px",
+    color: "#334155"
+  },
+  reviewCard: {
+    background: "#ffffff",
+    border: "1px solid #d7deea",
+    borderTop: "6px solid #2563eb",
+    borderRadius: "0 0 12px 12px",
+    padding: "24px"
+  },
+  reviewSection: {
+    padding: "14px 0",
+    borderBottom: "1px solid #e2e8f0"
+  },
+  reviewLabel: {
+    fontSize: "13px",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: "0.04em",
+    color: "#475569",
+    marginBottom: "6px"
+  },
+  reviewValue: {
+    fontSize: "18px",
+    fontWeight: "600",
+    color: "#0b1f3a"
+  },
+  reviewMeta: {
+    marginTop: "6px",
+    fontSize: "14px",
+    color: "#334155"
+  },
+  totalPrice: {
+    fontSize: "32px",
+    fontWeight: "800",
+    color: "#0b1f3a"
+  },
+  buttonRow: {
+    display: "flex",
+    gap: "12px",
+    marginTop: "24px",
+    flexWrap: "wrap"
+  },
+  primaryButton: {
+    padding: "14px 18px",
+    borderRadius: "10px",
+    border: "none",
+    background: "#0b1f3a",
+    color: "#ffffff",
+    fontSize: "16px",
+    fontWeight: "700",
     cursor: "pointer"
   },
-  secondary: {
-    padding: "12px",
-    background: "white",
-    border: "2px solid #d1d5db",
-    borderRadius: "8px",
+  secondaryButton: {
+    padding: "14px 18px",
+    borderRadius: "10px",
+    border: "2px solid #cbd5e1",
+    background: "#ffffff",
+    color: "#0b1f3a",
+    fontSize: "16px",
+    fontWeight: "700",
     cursor: "pointer"
   }
 };
