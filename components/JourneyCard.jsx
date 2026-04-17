@@ -59,8 +59,8 @@ export default function JourneyCard({
   const ladder = buildFlexibilityLadder(journey.fares);
   const firstClass = getFirstClassFare(journey.fares);
 
-  const flexFare = ladder.find((f) => f.type === "off_peak");
-  const anytimeFare = ladder.find((f) => f.type === "anytime");
+  const flexFare = ladder.find(f => f.type === "off_peak");
+  const anytimeFare = ladder.find(f => f.type === "anytime");
 
   const flexUpgrade = flexFare ? flexFare.delta : 0;
   const anytimeUpgrade = anytimeFare ? anytimeFare.delta : 0;
@@ -106,15 +106,13 @@ export default function JourneyCard({
         addFirst
       });
     }
-  }, [selected, addFlex, addAnytime, addFirst]); // intentional
+  }, [selected, addFlex, addAnytime, addFirst]);
 
   return (
-    <div
-      style={{
-        ...styles.card,
-        border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
-      }}
-    >
+    <div style={{
+      ...styles.card,
+      border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
+    }}>
       <div style={styles.topStripe} />
 
       <div style={styles.row}>
@@ -124,8 +122,7 @@ export default function JourneyCard({
           </div>
 
           <div style={styles.route}>
-            {journey.origin} ({journey.originCode}) →{" "}
-            {journey.destination} ({journey.destinationCode})
+            {journey.origin} → {journey.destination}
           </div>
 
           <div style={styles.duration}>{duration}</div>
@@ -136,13 +133,6 @@ export default function JourneyCard({
           </div>
 
           <div style={styles.meta}>Platform {journey.platform}</div>
-
-          <div style={styles.calls}>
-            Calling at:{" "}
-            {journey.callingPoints.length > 0
-              ? journey.callingPoints.join(" • ")
-              : "Direct service"}
-          </div>
         </div>
 
         <div style={styles.priceBlock}>
@@ -167,19 +157,19 @@ export default function JourneyCard({
             <div style={styles.timeline}>
               {getValidityBlocks(activeFareType).map((b, i) => (
                 <div key={i} style={styles.timelineItem}>
-                  <div
-                    style={{
-                      ...styles.block,
-                      background: b.valid ? "#16a34a" : "#dc2626"
-                    }}
-                  />
-                  <div style={styles.label}>{i % 3 === 0 ? b.label : ""}</div>
+                  <div style={{
+                    ...styles.block,
+                    background: b.valid ? "#16a34a" : "#dc2626"
+                  }} />
+                  <div style={styles.label}>
+                    {i % 3 === 0 ? b.label : ""}
+                  </div>
                 </div>
               ))}
             </div>
 
             <div style={styles.legend}>
-              <span>🟩 Valid (can travel)</span>
+              <span>🟩 Valid</span>
               <span>🟥 Not valid</span>
             </div>
           </>
@@ -200,7 +190,7 @@ export default function JourneyCard({
                 if (v) setAddAnytime(false);
               }}
             />
-            <span>+£{flexUpgrade} Add more flexibility (Off-Peak)</span>
+            +£{flexUpgrade} Add more flexibility (Off-Peak)
           </label>
         )}
 
@@ -215,7 +205,7 @@ export default function JourneyCard({
                 if (v) setAddFlex(false);
               }}
             />
-            <span>+£{anytimeUpgrade} Upgrade to fully flexible (Anytime)</span>
+            +£{anytimeUpgrade} Upgrade to fully flexible (Anytime)
           </label>
         )}
 
@@ -226,7 +216,7 @@ export default function JourneyCard({
               checked={addFirst}
               onChange={() => setAddFirst(!addFirst)}
             />
-            <span>+£{firstUpgrade} First Class</span>
+            +£{firstUpgrade} First Class
           </label>
         )}
       </div>
@@ -239,6 +229,7 @@ export default function JourneyCard({
         <div style={styles.post}>
           <button style={styles.secondary}>Add return</button>
           <button style={styles.secondary}>Add another journey</button>
+
           <button style={styles.primary} onClick={onContinue}>
             Continue to basket →
           </button>
@@ -276,9 +267,9 @@ const styles = {
     fontSize: "13px"
   },
   badgeRow: {
-    marginTop: "6px",
     display: "flex",
-    gap: "6px"
+    gap: "6px",
+    marginTop: "6px"
   },
   fast: {
     background: "#16a34a",
@@ -292,13 +283,8 @@ const styles = {
     padding: "2px 6px",
     borderRadius: "6px"
   },
-  priceBlock: {
-    textAlign: "right"
-  },
-  price: {
-    fontSize: "28px",
-    fontWeight: "800"
-  },
+  priceBlock: { textAlign: "right" },
+  price: { fontSize: "28px", fontWeight: "800" },
   cheapest: {
     background: "#d72638",
     color: "white",
@@ -306,80 +292,16 @@ const styles = {
     borderRadius: "6px",
     marginBottom: "4px"
   },
-  meta: {
-    fontSize: "13px",
-    marginTop: "4px",
-    color: "#374151"
-  },
-  calls: {
-    fontSize: "13px",
-    marginTop: "4px",
-    color: "#4b5563"
-  },
-  section: {
-    marginTop: "14px"
-  },
-  serviceOnly: {
-    color: "#16a34a"
-  },
-  validity: {
-    fontSize: "14px"
-  },
-  timeline: {
-    display: "flex",
-    gap: "4px",
-    marginTop: "6px"
-  },
-  timelineItem: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  block: {
-    width: "16px",
-    height: "10px"
-  },
-  label: {
-    fontSize: "10px"
-  },
-  legend: {
-    display: "flex",
-    gap: "12px",
-    fontSize: "12px",
-    marginTop: "8px"
-  },
-  option: {
-    display: "flex",
-    gap: "8px",
-    marginTop: "6px",
-    alignItems: "center"
-  },
-  select: {
-    marginTop: "14px",
-    width: "100%",
-    padding: "12px",
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "8px"
-  },
-  post: {
-    marginTop: "10px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px"
-  },
-  secondary: {
-    padding: "10px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    background: "white"
-  },
-  primary: {
-    padding: "12px",
-    background: "#111827",
-    color: "white",
-    border: "none",
-    borderRadius: "8px"
-  }
+  meta: { fontSize: "13px", marginTop: "4px" },
+  section: { marginTop: "14px" },
+  timeline: { display: "flex", gap: "4px", marginTop: "6px" },
+  timelineItem: { display: "flex", flexDirection: "column", alignItems: "center" },
+  block: { width: "16px", height: "10px" },
+  label: { fontSize: "10px" },
+  legend: { display: "flex", gap: "10px", marginTop: "6px" },
+  option: { display: "flex", gap: "8px", marginTop: "6px" },
+  select: { marginTop: "14px", width: "100%", padding: "12px", background: "#2563eb", color: "white", border: "none", borderRadius: "8px" },
+  post: { marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" },
+  secondary: { padding: "10px", border: "1px solid #ddd", borderRadius: "8px", background: "white" },
+  primary: { padding: "12px", background: "#111827", color: "white", border: "none", borderRadius: "8px" }
 };
