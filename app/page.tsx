@@ -11,21 +11,21 @@ function getDurationMinutes(dep, arr) {
   return ah * 60 + am - (dh * 60 + dm);
 }
 
-function getRestrictionText(activeFareType) {
-  if (activeFareType === "anytime") {
+function getRestrictionText(type) {
+  if (type === "anytime") {
     return "Valid on any train today.";
   }
 
-  if (activeFareType === "off_peak") {
+  if (type === "off_peak") {
     return "Valid on selected off-peak services. Some busy times may be excluded.";
   }
 
   return "Valid only on the train you selected.";
 }
 
-function getFareLabel(activeFareType) {
-  if (activeFareType === "anytime") return "Anytime";
-  if (activeFareType === "off_peak") return "Off-Peak";
+function getFareLabel(type) {
+  if (type === "anytime") return "Anytime";
+  if (type === "off_peak") return "Off-Peak";
   return "Advance";
 }
 
@@ -36,67 +36,74 @@ export default function Home() {
   const [view, setView] = useState("list");
 
   const cheapestPrice = Math.min(
-    ...data.journeys.map((j) => getCheapestFare(j.fares).price)
+    ...data.journeys.map(j => getCheapestFare(j.fares).price)
   );
 
   const fastestDuration = Math.min(
-    ...data.journeys.map((j) => getDurationMinutes(j.departure, j.arrival))
+    ...data.journeys.map(j =>
+      getDurationMinutes(j.departure, j.arrival)
+    )
   );
 
+  // =========================
+  // BASKET PAGE
+  // =========================
   if (view === "basket" && selectedJourney) {
-    const activeFareType = basketDetails?.activeFareType || "advance";
-    const restrictionText = getRestrictionText(activeFareType);
+    const type = basketDetails?.activeFareType || "advance";
 
     return (
       <div style={styles.page}>
         <div style={styles.shell}>
-          <div style={styles.brandBar}>
-            <div style={styles.brandMark}>⇄</div>
+          <div style={styles.header}>
+            <div style={styles.logo}>⇄</div>
             <div>
-              <div style={styles.brandTitle}>Great British Railways</div>
-              <div style={styles.brandSub}>Journey review</div>
+              <div style={styles.brand}>Great British Railways</div>
+              <div style={styles.sub}>Journey review</div>
             </div>
           </div>
 
-          <div style={styles.reviewCard}>
-            <h1 style={styles.pageTitle}>Check your journey</h1>
+          <div style={styles.card}>
+            <h1 style={styles.title}>Check your journey</h1>
 
-            <div style={styles.reviewSection}>
-              <div style={styles.reviewLabel}>Passenger</div>
-              <div style={styles.reviewValue}>1 adult travelling</div>
+            <div style={styles.section}>
+              <strong>Passenger</strong>
+              <div>1 adult travelling</div>
             </div>
 
-            <div style={styles.reviewSection}>
-              <div style={styles.reviewLabel}>Route</div>
-              <div style={styles.reviewValue}>
-                {selectedJourney.origin} ({selectedJourney.originCode}) →{" "}
-                {selectedJourney.destination} ({selectedJourney.destinationCode})
+            <div style={styles.section}>
+              <strong>Route</strong>
+              <div>
+                {selectedJourney.origin} → {selectedJourney.destination}
               </div>
             </div>
 
-            <div style={styles.reviewSection}>
-              <div style={styles.reviewLabel}>Service</div>
-              <div style={styles.reviewValue}>
+            <div style={styles.section}>
+              <strong>Service</strong>
+              <div>
                 {selectedJourney.departure} → {selectedJourney.arrival}
               </div>
-              <div style={styles.reviewMeta}>Platform {selectedJourney.platform}</div>
             </div>
 
-            <div style={styles.reviewSection}>
-              <div style={styles.reviewLabel}>Ticket type</div>
-              <div style={styles.reviewValue}>{getFareLabel(activeFareType)}</div>
-              <div style={styles.reviewMeta}>{restrictionText}</div>
+            <div style={styles.section}>
+              <strong>Ticket</strong>
+              <div>{getFareLabel(type)}</div>
+              <div style={styles.meta}>
+                {getRestrictionText(type)}
+              </div>
             </div>
 
-            <div style={styles.reviewSection}>
-              <div style={styles.reviewLabel}>Total price</div>
-              <div style={styles.totalPrice}>£{total}</div>
+            <div style={styles.section}>
+              <strong>Total</strong>
+              <div style={styles.total}>£{total}</div>
             </div>
 
             <div style={styles.buttonRow}>
-              <button style={styles.primaryButton}>Continue</button>
+              <button style={styles.primary}>
+                Continue
+              </button>
+
               <button
-                style={styles.secondaryButton}
+                style={styles.secondary}
                 onClick={() => setView("list")}
               >
                 Go back
@@ -108,26 +115,25 @@ export default function Home() {
     );
   }
 
+  // =========================
+  // MAIN LIST
+  // =========================
   return (
     <div style={styles.page}>
       <div style={styles.shell}>
-        <div style={styles.brandBar}>
-          <div style={styles.brandMark}>⇄</div>
+        <div style={styles.header}>
+          <div style={styles.logo}>⇄</div>
           <div>
-            <div style={styles.brandTitle}>Great British Railways</div>
-            <div style={styles.brandSub}>Journey planner</div>
+            <div style={styles.brand}>Great British Railways</div>
+            <div style={styles.sub}>Journey planner</div>
           </div>
         </div>
 
-        <div style={styles.hero}>
-          <h1 style={styles.pageTitle}>London Euston to Manchester Piccadilly</h1>
-          <p style={styles.pageIntro}>
-            Compare fares, flexibility and journey details for Avanti West Coast
-            services.
-          </p>
-        </div>
+        <h1 style={styles.title}>
+          London Euston → Manchester Piccadilly
+        </h1>
 
-        {data.journeys.map((journey) => {
+        {data.journeys.map(journey => {
           const basePrice = getCheapestFare(journey.fares).price;
 
           return (
@@ -142,15 +148,12 @@ export default function Home() {
                 setTotal(basePrice);
                 setBasketDetails({
                   total: basePrice,
-                  activeFareType: "advance",
-                  addFlex: false,
-                  addAnytime: false,
-                  addFirst: false
+                  activeFareType: "advance"
                 });
               }}
-              onPriceChange={(details) => {
-                setTotal(details.total);
-                setBasketDetails(details);
+              onPriceChange={(d) => {
+                setTotal(d.total);
+                setBasketDetails(d);
               }}
               onContinue={() => setView("basket")}
             />
@@ -163,126 +166,86 @@ export default function Home() {
 
 const styles = {
   page: {
-    minHeight: "100vh",
     background: "#eef2f7",
-    padding: "24px",
-    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-    color: "#0b1f3a"
+    minHeight: "100vh",
+    padding: "20px",
+    fontFamily: "system-ui"
   },
+
   shell: {
-    maxWidth: "980px",
+    maxWidth: "900px",
     margin: "0 auto"
   },
-  brandBar: {
+
+  header: {
     display: "flex",
-    alignItems: "center",
-    gap: "14px",
+    gap: "12px",
     background: "#0b1f3a",
-    color: "#ffffff",
-    padding: "14px 18px",
-    borderRadius: "12px 12px 0 0",
-    borderBottom: "6px solid #d72638"
+    color: "white",
+    padding: "12px",
+    borderRadius: "10px"
   },
-  brandMark: {
-    width: "40px",
-    height: "40px",
-    borderRadius: "8px",
-    background: "#ffffff",
+
+  logo: {
+    background: "white",
     color: "#0b1f3a",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "800",
-    fontSize: "20px"
+    padding: "6px 10px",
+    borderRadius: "6px",
+    fontWeight: "700"
   },
-  brandTitle: {
-    fontSize: "18px",
-    fontWeight: "700",
-    lineHeight: 1.2
+
+  brand: {
+    fontWeight: "700"
   },
-  brandSub: {
+
+  sub: {
     fontSize: "13px",
-    opacity: 0.9,
-    marginTop: "2px"
+    opacity: 0.8
   },
-  hero: {
-    background: "#ffffff",
-    padding: "22px 24px",
-    borderLeft: "1px solid #d7deea",
-    borderRight: "1px solid #d7deea",
-    borderBottom: "1px solid #d7deea",
-    marginBottom: "18px"
+
+  title: {
+    marginTop: "16px",
+    marginBottom: "16px"
   },
-  pageTitle: {
-    margin: 0,
-    fontSize: "30px",
-    lineHeight: 1.15,
-    color: "#0b1f3a"
+
+  card: {
+    background: "white",
+    padding: "20px",
+    borderRadius: "10px"
   },
-  pageIntro: {
-    marginTop: "8px",
-    marginBottom: 0,
-    fontSize: "16px",
-    color: "#334155"
+
+  section: {
+    marginTop: "12px"
   },
-  reviewCard: {
-    background: "#ffffff",
-    border: "1px solid #d7deea",
-    borderTop: "6px solid #2563eb",
-    borderRadius: "0 0 12px 12px",
-    padding: "24px"
-  },
-  reviewSection: {
-    padding: "14px 0",
-    borderBottom: "1px solid #e2e8f0"
-  },
-  reviewLabel: {
-    fontSize: "13px",
-    fontWeight: "700",
-    textTransform: "uppercase",
-    letterSpacing: "0.04em",
-    color: "#475569",
-    marginBottom: "6px"
-  },
-  reviewValue: {
-    fontSize: "18px",
-    fontWeight: "600",
-    color: "#0b1f3a"
-  },
-  reviewMeta: {
-    marginTop: "6px",
+
+  meta: {
     fontSize: "14px",
-    color: "#334155"
+    color: "#475569"
   },
-  totalPrice: {
-    fontSize: "32px",
-    fontWeight: "800",
-    color: "#0b1f3a"
+
+  total: {
+    fontSize: "28px",
+    fontWeight: "800"
   },
+
   buttonRow: {
     display: "flex",
     gap: "12px",
-    marginTop: "24px",
-    flexWrap: "wrap"
+    marginTop: "20px"
   },
-  primaryButton: {
-    padding: "14px 18px",
-    borderRadius: "10px",
-    border: "none",
+
+  primary: {
+    padding: "12px",
     background: "#0b1f3a",
-    color: "#ffffff",
-    fontSize: "16px",
-    fontWeight: "700",
-    cursor: "pointer"
+    color: "white",
+    border: "none",
+    borderRadius: "8px"
   },
-  secondaryButton: {
-    padding: "14px 18px",
-    borderRadius: "10px",
-    border: "2px solid #cbd5e1",
-    background: "#ffffff",
-    color: "#0b1f3a",
-    fontSize: "16px",
-    fontWeight: "700",
-    cursor: "pointer"
+
+  secondary: {
+    padding: "12px",
+    border: "2px solid #ddd",
+    background: "white",
+    borderRadius: "8px"
   }
 };
