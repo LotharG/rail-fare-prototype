@@ -23,21 +23,10 @@ function getValidityBlocks(type) {
   if (type === "advance") return null;
 
   if (type === "anytime") {
-    return [
-      { label: "06", valid: true },
-      { label: "07", valid: true },
-      { label: "08", valid: true },
-      { label: "09", valid: true },
-      { label: "10", valid: true },
-      { label: "11", valid: true },
-      { label: "12", valid: true },
-      { label: "13", valid: true },
-      { label: "14", valid: true },
-      { label: "15", valid: true },
-      { label: "16", valid: true },
-      { label: "17", valid: true },
-      { label: "18", valid: true }
-    ];
+    return Array.from({ length: 13 }, (_, i) => ({
+      label: String(6 + i),
+      valid: true
+    }));
   }
 
   return [
@@ -70,8 +59,8 @@ export default function JourneyCard({
   const ladder = buildFlexibilityLadder(journey.fares);
   const firstClass = getFirstClassFare(journey.fares);
 
-  const flexFare = ladder.find((f) => f.type === "off_peak");
-  const anytimeFare = ladder.find((f) => f.type === "anytime");
+  const flexFare = ladder.find(f => f.type === "off_peak");
+  const anytimeFare = ladder.find(f => f.type === "anytime");
 
   const flexUpgrade = flexFare ? flexFare.delta : 0;
   const anytimeUpgrade = anytimeFare ? anytimeFare.delta : 0;
@@ -85,6 +74,7 @@ export default function JourneyCard({
   const [addAnytime, setAddAnytime] = useState(false);
   const [addFirst, setAddFirst] = useState(false);
 
+  // Reset only when deselected
   useEffect(() => {
     if (!selected) {
       setAddFlex(false);
@@ -94,27 +84,24 @@ export default function JourneyCard({
   }, [selected]);
 
   let activeFareType = "advance";
-  if (addAnytime) {
-    activeFareType = "anytime";
-  } else if (addFlex) {
-    activeFareType = "off_peak";
-  }
+  if (addAnytime) activeFareType = "anytime";
+  else if (addFlex) activeFareType = "off_peak";
 
   let total = cheapest.price;
-  if (addAnytime) {
-    total += anytimeUpgrade;
-  } else if (addFlex) {
-    total += flexUpgrade;
-  }
-  if (addFirst) {
-    total += firstUpgrade;
-  }
+  if (addAnytime) total += anytimeUpgrade;
+  else if (addFlex) total += flexUpgrade;
+  if (addFirst) total += firstUpgrade;
 
-  const durationMins = getDurationMinutes(journey.departure, journey.arrival);
+  const durationMins = getDurationMinutes(
+    journey.departure,
+    journey.arrival
+  );
+
   const duration = formatDuration(durationMins);
   const stops = journey.callingPoints.length;
   const isFastest = durationMins === fastestDuration;
 
+  // Update parent WITHOUT causing loop
   useEffect(() => {
     if (selected && onPriceChange) {
       onPriceChange({
@@ -125,17 +112,17 @@ export default function JourneyCard({
         addFirst
       });
     }
-  }, [selected, addFlex, addAnytime, addFirst]); // intentionally excludes parent callback identity
+  }, [selected, addFlex, addAnytime, addFirst]);
 
   return (
-    <div
-      style={{
-        ...styles.card,
-        border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
-      }}
-    >
+    <div style={{
+      ...styles.card,
+      border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
+    }}>
+      {/* TOP STRIPE */}
       <div style={styles.topStripe} />
 
+      {/* HEADER */}
       <div style={styles.row}>
         <div>
           <div style={styles.time}>
@@ -143,128 +130,114 @@ export default function JourneyCard({
           </div>
 
           <div style={styles.route}>
-            {journey.origin} ({journey.originCode}) →{" "}
-            {journey.destination} ({journey.destinationCode})
+            {journey.origin} → {journey.destination}
           </div>
 
           <div style={styles.duration}>{duration}</div>
 
           <div style={styles.badgeRow}>
-            {isFastest && <span style={styles.fastBadge}>Fastest</span>}
-            {stops === 0 && <span style={styles.directBadge}>Direct</span>}
-            {stops <= 2 && !isFastest && (
-              <span style={styles.fewStopsBadge}>Fewer stops</span>
-            )}
+            {isFastest && <span style={styles.fast}>Fastest</span>}
+            {stops === 0 && <span style={styles.direct}>Direct</span>}
           </div>
 
           <div style={styles.meta}>Platform {journey.platform}</div>
-
-          <div style={styles.calls}>
-            Calling at:{" "}
-            {journey.callingPoints.length > 0
-              ? journey.callingPoints.join(" • ")
-              : "Direct service"}
-          </div>
         </div>
 
         <div style={styles.priceBlock}>
-          {isCheapest && <span style={styles.cheapestBadge}>Cheapest</span>}
-          <div style={styles.price} aria-live="polite">
-            £{total}
-          </div>
+          {isCheapest && <div style={styles.cheapest}>Cheapest</div>}
+          <div style={styles.price}>£{total}</div>
         </div>
       </div>
 
+      {/* VALIDITY */}
       <div style={styles.section}>
         {activeFareType === "advance" ? (
           <div style={styles.serviceOnly}>
             ✔ This fare is valid on this train only
           </div>
         ) : (
-          <div>
-            <div style={styles.validityLabel}>
+          <>
+            <div style={styles.validity}>
               {activeFareType === "anytime"
                 ? "✔ Valid on any service today"
                 : "✔ Valid on selected off-peak services"}
             </div>
 
-            <div style={styles.timelineWrapper}>
+            <div style={styles.timeline}>
               {getValidityBlocks(activeFareType).map((b, i) => (
                 <div key={i} style={styles.timelineItem}>
-                  <div
-                    style={{
-                      ...styles.block,
-                      background: b.valid ? "#16a34a" : "#dc2626"
-                    }}
-                  />
-                  <div style={styles.label}>{i % 3 === 0 ? b.label : ""}</div>
+                  <div style={{
+                    ...styles.block,
+                    background: b.valid ? "#16a34a" : "#dc2626"
+                  }} />
+                  <div style={styles.label}>
+                    {i % 3 === 0 ? b.label : ""}
+                  </div>
                 </div>
               ))}
             </div>
-
-            <div style={styles.legend}>
-              <span>🟩 Valid (can travel)</span>
-              <span>🟥 Not valid</span>
-            </div>
-          </div>
+          </>
         )}
       </div>
 
+      {/* OPTIONS */}
       <div style={styles.section}>
-        <strong style={styles.sectionTitle}>Ticket options</strong>
+        <strong>Ticket options</strong>
 
         {flexFare && (
-          <label style={styles.optionRow}>
+          <label style={styles.option}>
             <input
               type="checkbox"
               checked={addFlex}
               onChange={() => {
-                const newValue = !addFlex;
-                setAddFlex(newValue);
-                if (newValue) setAddAnytime(false);
+                const v = !addFlex;
+                setAddFlex(v);
+                if (v) setAddAnytime(false);
               }}
             />
-            <span>+£{flexUpgrade} Add more flexibility (Off-Peak)</span>
+            +£{flexUpgrade} Add more flexibility (Off-Peak)
           </label>
         )}
 
         {anytimeFare && (
-          <label style={styles.optionRow}>
+          <label style={styles.option}>
             <input
               type="checkbox"
               checked={addAnytime}
               onChange={() => {
-                const newValue = !addAnytime;
-                setAddAnytime(newValue);
-                if (newValue) setAddFlex(false);
+                const v = !addAnytime;
+                setAddAnytime(v);
+                if (v) setAddFlex(false);
               }}
             />
-            <span>+£{anytimeUpgrade} Upgrade to fully flexible (Anytime)</span>
+            +£{anytimeUpgrade} Upgrade to fully flexible (Anytime)
           </label>
         )}
 
         {firstUpgrade > 0 && (
-          <label style={styles.optionRow}>
+          <label style={styles.option}>
             <input
               type="checkbox"
               checked={addFirst}
               onChange={() => setAddFirst(!addFirst)}
             />
-            <span>+£{firstUpgrade} First Class</span>
+            +£{firstUpgrade} First Class
           </label>
         )}
       </div>
 
-      <button onClick={onSelect} style={styles.selectButton}>
+      {/* SELECT */}
+      <button onClick={onSelect} style={styles.select}>
         {selected ? "Selected ✓" : "Select"}
       </button>
 
+      {/* POST SELECT */}
       {selected && (
-        <div style={styles.postSelect}>
-          <button style={styles.secondaryButton}>Add return</button>
-          <button style={styles.secondaryButton}>Add another journey</button>
+        <div style={styles.post}>
+          <button style={styles.secondary}>Add return</button>
+          <button style={styles.secondary}>Add another journey</button>
 
-          <button style={styles.primaryAction} onClick={onContinue}>
+          <button style={styles.primary} onClick={onContinue}>
             Continue to basket →
           </button>
         </div>
@@ -275,123 +248,64 @@ export default function JourneyCard({
 
 const styles = {
   card: {
-    background: "#ffffff",
-    borderRadius: "14px",
-    marginBottom: "20px",
+    background: "#fff",
     padding: "20px",
-    boxShadow: "0 2px 8px rgba(11, 31, 58, 0.06)"
+    borderRadius: "12px",
+    marginBottom: "20px"
   },
   topStripe: {
-    height: "6px",
-    borderRadius: "8px 8px 0 0",
-    background: "linear-gradient(90deg, #0b1f3a 0%, #2563eb 68%, #d72638 100%)",
-    margin: "-20px -20px 18px -20px"
+    height: "5px",
+    background: "linear-gradient(to right, #0b1f3a, #2563eb, #d72638)",
+    margin: "-20px -20px 12px -20px"
   },
   row: {
     display: "flex",
-    justifyContent: "space-between",
-    gap: "16px"
+    justifyContent: "space-between"
   },
   time: {
     fontSize: "22px",
-    fontWeight: "800",
-    color: "#0b1f3a"
+    fontWeight: "700"
   },
   route: {
     fontSize: "14px",
-    color: "#334155",
-    marginTop: "4px"
-  },
-  duration: {
-    fontSize: "14px",
-    marginTop: "4px",
-    color: "#334155"
-  },
-  meta: {
-    fontSize: "13px",
-    marginTop: "6px",
-    color: "#334155"
-  },
-  calls: {
-    fontSize: "13px",
-    marginTop: "4px",
     color: "#475569"
   },
+  duration: {
+    fontSize: "13px"
+  },
   badgeRow: {
+    marginTop: "6px",
     display: "flex",
-    gap: "8px",
-    marginTop: "8px",
-    flexWrap: "wrap"
+    gap: "6px"
   },
-  fastBadge: {
+  fast: {
     background: "#16a34a",
-    color: "#ffffff",
-    padding: "3px 8px",
-    borderRadius: "999px",
-    fontSize: "12px",
-    fontWeight: "700"
+    color: "white",
+    padding: "2px 6px",
+    borderRadius: "6px"
   },
-  directBadge: {
+  direct: {
     background: "#2563eb",
-    color: "#ffffff",
-    padding: "3px 8px",
-    borderRadius: "999px",
-    fontSize: "12px",
-    fontWeight: "700"
+    color: "white",
+    padding: "2px 6px",
+    borderRadius: "6px"
   },
-  fewStopsBadge: {
+  priceBlock: { textAlign: "right" },
+  price: { fontSize: "28px", fontWeight: "800" },
+  cheapest: {
     background: "#d72638",
-    color: "#ffffff",
-    padding: "3px 8px",
-    borderRadius: "999px",
-    fontSize: "12px",
-    fontWeight: "700"
+    color: "white",
+    padding: "2px 6px",
+    borderRadius: "6px",
+    marginBottom: "4px"
   },
-  priceBlock: {
-    textAlign: "right",
-    minWidth: "92px"
-  },
-  price: {
-    fontSize: "30px",
-    fontWeight: "800",
-    color: "#0b1f3a"
-  },
-  cheapestBadge: {
-    background: "#d72638",
-    color: "#ffffff",
-    padding: "4px 8px",
-    borderRadius: "999px",
-    fontSize: "12px",
-    fontWeight: "700",
-    display: "inline-block",
-    marginBottom: "6px"
-  },
-  section: {
-    marginTop: "16px",
-    paddingTop: "16px",
-    borderTop: "1px solid #e2e8f0"
-  },
-  sectionTitle: {
-    display: "block",
-    marginBottom: "8px",
-    color: "#0b1f3a",
-    fontSize: "15px"
-  },
-  serviceOnly: {
-    fontSize: "14px",
-    color: "#0b1f3a",
-    fontWeight: "600"
-  },
-  validityLabel: {
-    fontSize: "14px",
-    color: "#0b1f3a",
-    fontWeight: "600"
-  },
-  timelineWrapper: {
+  section: { marginTop: "14px" },
+  serviceOnly: { color: "#16a34a" },
+  validity: { fontSize: "14px" },
+  timeline: {
     display: "flex",
     gap: "4px",
-    marginTop: "10px",
-    flexWrap: "wrap"
+    marginTop: "6px"
   },
   timelineItem: {
     display: "flex",
@@ -399,66 +313,41 @@ const styles = {
     alignItems: "center"
   },
   block: {
-    width: "18px",
-    height: "12px",
-    borderRadius: "2px"
+    width: "16px",
+    height: "10px"
   },
-  label: {
-    fontSize: "12px",
-    color: "#334155",
-    marginTop: "3px"
-  },
-  legend: {
+  label: { fontSize: "10px" },
+  option: {
     display: "flex",
-    gap: "12px",
-    fontSize: "12px",
-    marginTop: "8px",
-    color: "#334155",
-    flexWrap: "wrap"
+    gap: "8px",
+    marginTop: "6px"
   },
-  optionRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    padding: "8px 0",
-    cursor: "pointer",
-    fontSize: "14px",
-    color: "#0b1f3a"
-  },
-  selectButton: {
-    marginTop: "16px",
+  select: {
+    marginTop: "14px",
     width: "100%",
-    padding: "13px",
-    borderRadius: "10px",
+    padding: "12px",
     background: "#2563eb",
-    color: "#ffffff",
+    color: "white",
     border: "none",
-    fontWeight: "700",
-    fontSize: "15px",
-    cursor: "pointer"
+    borderRadius: "8px"
   },
-  postSelect: {
-    marginTop: "12px",
+  post: {
+    marginTop: "10px",
     display: "flex",
     flexDirection: "column",
-    gap: "10px"
+    gap: "8px"
   },
-  secondaryButton: {
-    padding: "11px",
-    borderRadius: "10px",
-    border: "2px solid #cbd5e1",
-    background: "#ffffff",
-    color: "#0b1f3a",
-    fontWeight: "700",
-    cursor: "pointer"
+  secondary: {
+    padding: "10px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    background: "white"
   },
-  primaryAction: {
-    padding: "13px",
-    borderRadius: "10px",
-    background: "#0b1f3a",
-    color: "#ffffff",
-    fontWeight: "700",
+  primary: {
+    padding: "12px",
+    background: "#111827",
+    color: "white",
     border: "none",
-    cursor: "pointer"
+    borderRadius: "8px"
   }
 };
