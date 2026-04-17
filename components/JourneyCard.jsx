@@ -24,7 +24,7 @@ function getValidityBlocks(type) {
 
   if (type === "anytime") {
     return Array.from({ length: 13 }, (_, i) => ({
-      label: String(6 + i),
+      label: String(6 + i).padStart(2, "0"),
       valid: true
     }));
   }
@@ -59,8 +59,8 @@ export default function JourneyCard({
   const ladder = buildFlexibilityLadder(journey.fares);
   const firstClass = getFirstClassFare(journey.fares);
 
-  const flexFare = ladder.find(f => f.type === "off_peak");
-  const anytimeFare = ladder.find(f => f.type === "anytime");
+  const flexFare = ladder.find((f) => f.type === "off_peak");
+  const anytimeFare = ladder.find((f) => f.type === "anytime");
 
   const flexUpgrade = flexFare ? flexFare.delta : 0;
   const anytimeUpgrade = anytimeFare ? anytimeFare.delta : 0;
@@ -74,7 +74,6 @@ export default function JourneyCard({
   const [addAnytime, setAddAnytime] = useState(false);
   const [addFirst, setAddFirst] = useState(false);
 
-  // Reset only when deselected
   useEffect(() => {
     if (!selected) {
       setAddFlex(false);
@@ -92,16 +91,11 @@ export default function JourneyCard({
   else if (addFlex) total += flexUpgrade;
   if (addFirst) total += firstUpgrade;
 
-  const durationMins = getDurationMinutes(
-    journey.departure,
-    journey.arrival
-  );
-
+  const durationMins = getDurationMinutes(journey.departure, journey.arrival);
   const duration = formatDuration(durationMins);
   const stops = journey.callingPoints.length;
   const isFastest = durationMins === fastestDuration;
 
-  // Update parent WITHOUT causing loop
   useEffect(() => {
     if (selected && onPriceChange) {
       onPriceChange({
@@ -112,17 +106,17 @@ export default function JourneyCard({
         addFirst
       });
     }
-  }, [selected, addFlex, addAnytime, addFirst]);
+  }, [selected, addFlex, addAnytime, addFirst]); // intentional
 
   return (
-    <div style={{
-      ...styles.card,
-      border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
-    }}>
-      {/* TOP STRIPE */}
+    <div
+      style={{
+        ...styles.card,
+        border: selected ? "2px solid #2563eb" : "1px solid #d7deea"
+      }}
+    >
       <div style={styles.topStripe} />
 
-      {/* HEADER */}
       <div style={styles.row}>
         <div>
           <div style={styles.time}>
@@ -130,7 +124,8 @@ export default function JourneyCard({
           </div>
 
           <div style={styles.route}>
-            {journey.origin} → {journey.destination}
+            {journey.origin} ({journey.originCode}) →{" "}
+            {journey.destination} ({journey.destinationCode})
           </div>
 
           <div style={styles.duration}>{duration}</div>
@@ -141,6 +136,13 @@ export default function JourneyCard({
           </div>
 
           <div style={styles.meta}>Platform {journey.platform}</div>
+
+          <div style={styles.calls}>
+            Calling at:{" "}
+            {journey.callingPoints.length > 0
+              ? journey.callingPoints.join(" • ")
+              : "Direct service"}
+          </div>
         </div>
 
         <div style={styles.priceBlock}>
@@ -149,7 +151,6 @@ export default function JourneyCard({
         </div>
       </div>
 
-      {/* VALIDITY */}
       <div style={styles.section}>
         {activeFareType === "advance" ? (
           <div style={styles.serviceOnly}>
@@ -166,21 +167,25 @@ export default function JourneyCard({
             <div style={styles.timeline}>
               {getValidityBlocks(activeFareType).map((b, i) => (
                 <div key={i} style={styles.timelineItem}>
-                  <div style={{
-                    ...styles.block,
-                    background: b.valid ? "#16a34a" : "#dc2626"
-                  }} />
-                  <div style={styles.label}>
-                    {i % 3 === 0 ? b.label : ""}
-                  </div>
+                  <div
+                    style={{
+                      ...styles.block,
+                      background: b.valid ? "#16a34a" : "#dc2626"
+                    }}
+                  />
+                  <div style={styles.label}>{i % 3 === 0 ? b.label : ""}</div>
                 </div>
               ))}
+            </div>
+
+            <div style={styles.legend}>
+              <span>🟩 Valid (can travel)</span>
+              <span>🟥 Not valid</span>
             </div>
           </>
         )}
       </div>
 
-      {/* OPTIONS */}
       <div style={styles.section}>
         <strong>Ticket options</strong>
 
@@ -195,7 +200,7 @@ export default function JourneyCard({
                 if (v) setAddAnytime(false);
               }}
             />
-            +£{flexUpgrade} Add more flexibility (Off-Peak)
+            <span>+£{flexUpgrade} Add more flexibility (Off-Peak)</span>
           </label>
         )}
 
@@ -210,7 +215,7 @@ export default function JourneyCard({
                 if (v) setAddFlex(false);
               }}
             />
-            +£{anytimeUpgrade} Upgrade to fully flexible (Anytime)
+            <span>+£{anytimeUpgrade} Upgrade to fully flexible (Anytime)</span>
           </label>
         )}
 
@@ -221,22 +226,19 @@ export default function JourneyCard({
               checked={addFirst}
               onChange={() => setAddFirst(!addFirst)}
             />
-            +£{firstUpgrade} First Class
+            <span>+£{firstUpgrade} First Class</span>
           </label>
         )}
       </div>
 
-      {/* SELECT */}
       <button onClick={onSelect} style={styles.select}>
         {selected ? "Selected ✓" : "Select"}
       </button>
 
-      {/* POST SELECT */}
       {selected && (
         <div style={styles.post}>
           <button style={styles.secondary}>Add return</button>
           <button style={styles.secondary}>Add another journey</button>
-
           <button style={styles.primary} onClick={onContinue}>
             Continue to basket →
           </button>
@@ -290,8 +292,13 @@ const styles = {
     padding: "2px 6px",
     borderRadius: "6px"
   },
-  priceBlock: { textAlign: "right" },
-  price: { fontSize: "28px", fontWeight: "800" },
+  priceBlock: {
+    textAlign: "right"
+  },
+  price: {
+    fontSize: "28px",
+    fontWeight: "800"
+  },
   cheapest: {
     background: "#d72638",
     color: "white",
@@ -299,9 +306,25 @@ const styles = {
     borderRadius: "6px",
     marginBottom: "4px"
   },
-  section: { marginTop: "14px" },
-  serviceOnly: { color: "#16a34a" },
-  validity: { fontSize: "14px" },
+  meta: {
+    fontSize: "13px",
+    marginTop: "4px",
+    color: "#374151"
+  },
+  calls: {
+    fontSize: "13px",
+    marginTop: "4px",
+    color: "#4b5563"
+  },
+  section: {
+    marginTop: "14px"
+  },
+  serviceOnly: {
+    color: "#16a34a"
+  },
+  validity: {
+    fontSize: "14px"
+  },
   timeline: {
     display: "flex",
     gap: "4px",
@@ -316,11 +339,20 @@ const styles = {
     width: "16px",
     height: "10px"
   },
-  label: { fontSize: "10px" },
+  label: {
+    fontSize: "10px"
+  },
+  legend: {
+    display: "flex",
+    gap: "12px",
+    fontSize: "12px",
+    marginTop: "8px"
+  },
   option: {
     display: "flex",
     gap: "8px",
-    marginTop: "6px"
+    marginTop: "6px",
+    alignItems: "center"
   },
   select: {
     marginTop: "14px",
