@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
+import { ReactNode } from "react";
 import Header from "../components/Header";
-import type { ReactNode } from "react";
+import "./globals.css";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Great British Railways",
-  description: "Rail journey planner prototype"
+  description: "Rail journey planner prototype",
 };
 
 export default function RootLayout({
@@ -25,10 +27,10 @@ const styles = {
   body: {
     margin: 0,
     fontFamily: "system-ui",
-    background: "#f4f7fb"
+    background: "#f4f7fb",
   },
 
   main: {
-    paddingTop: "104px"
-  }
+    paddingTop: "104px", // space for fixed header
+  },
 };
