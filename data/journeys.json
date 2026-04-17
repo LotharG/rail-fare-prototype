@@ -1,173 +1,415 @@
 {
   "journeys": [
     {
-      "id": "0700",
+      "id": 1,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "07:00",
-      "arrival": "09:10",
+      "departure": "07:13",
+      "arrival": "09:20",
       "platform": "5",
-      "callingPoints": ["Milton Keynes", "Stoke-on-Trent", "Macclesfield"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 65 },
-        { "type": "off_peak", "class": "standard", "price": 95 },
-        { "type": "anytime", "class": "standard", "price": 180 },
-        { "type": "advance", "class": "first", "price": 120 }
+        { "type": "advance", "price": 45.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "0720",
+      "id": 2,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "07:20",
-      "arrival": "09:35",
+      "departure": "08:13",
+      "arrival": "10:20",
       "platform": "6",
-      "callingPoints": ["Milton Keynes", "Crewe"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 60 },
-        { "type": "off_peak", "class": "standard", "price": 90 },
-        { "type": "anytime", "class": "standard", "price": 180 },
-        { "type": "advance", "class": "first", "price": 110 }
+        { "type": "advance", "price": 55.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "0800",
+      "id": 3,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "08:00",
-      "arrival": "10:10",
+      "departure": "09:13",
+      "arrival": "11:20",
       "platform": "7",
-      "callingPoints": ["Milton Keynes", "Stoke-on-Trent"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 55 },
-        { "type": "off_peak", "class": "standard", "price": 85 },
-        { "type": "anytime", "class": "standard", "price": 170 },
-        { "type": "advance", "class": "first", "price": 100 }
+        { "type": "advance", "price": 39.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "0900",
+      "id": 4,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "09:00",
-      "arrival": "11:10",
+      "departure": "10:13",
+      "arrival": "12:20",
       "platform": "8",
-      "callingPoints": ["Milton Keynes", "Crewe"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 40 },
-        { "type": "off_peak", "class": "standard", "price": 70 },
-        { "type": "anytime", "class": "standard", "price": 150 },
-        { "type": "advance", "class": "first", "price": 75 }
+        { "type": "advance", "price": 34.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "1000",
+      "id": 5,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "10:00",
-      "arrival": "12:10",
+      "departure": "11:13",
+      "arrival": "13:20",
       "platform": "9",
-      "callingPoints": ["Milton Keynes"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 30 },
-        { "type": "off_peak", "class": "standard", "price": 60 },
-        { "type": "anytime", "class": "standard", "price": 140 },
-        { "type": "advance", "class": "first", "price": 60 }
+        { "type": "advance", "price": 32.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "1200",
+      "id": 6,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "12:00",
-      "arrival": "14:10",
+      "departure": "12:13",
+      "arrival": "14:20",
       "platform": "10",
       "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 25 },
-        { "type": "off_peak", "class": "standard", "price": 50 },
-        { "type": "anytime", "class": "standard", "price": 130 },
-        { "type": "advance", "class": "first", "price": 50 }
+        { "type": "advance", "price": 30.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "1400",
+      "id": 7,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "14:00",
-      "arrival": "16:10",
+      "departure": "13:13",
+      "arrival": "15:20",
       "platform": "11",
-      "callingPoints": ["Milton Keynes"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 30 },
-        { "type": "off_peak", "class": "standard", "price": 55 },
-        { "type": "anytime", "class": "standard", "price": 140 },
-        { "type": "advance", "class": "first", "price": 55 }
+        { "type": "advance", "price": 31.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "1600",
+      "id": 8,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "16:00",
-      "arrival": "18:10",
+      "departure": "14:13",
+      "arrival": "16:20",
       "platform": "12",
-      "callingPoints": ["Milton Keynes", "Stoke-on-Trent"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 50 },
-        { "type": "off_peak", "class": "standard", "price": 80 },
-        { "type": "anytime", "class": "standard", "price": 170 },
-        { "type": "advance", "class": "first", "price": 95 }
+        { "type": "advance", "price": 33.00, "class": "standard" },
+        { "type": "off_peak", "price": 82.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "1800",
+      "id": 9,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "18:00",
-      "arrival": "20:10",
+      "departure": "15:13",
+      "arrival": "17:20",
       "platform": "13",
-      "callingPoints": ["Milton Keynes", "Crewe"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 55 },
-        { "type": "off_peak", "class": "standard", "price": 85 },
-        { "type": "anytime", "class": "standard", "price": 170 },
-        { "type": "advance", "class": "first", "price": 100 }
+        { "type": "advance", "price": 42.00, "class": "standard" },
+        { "type": "off_peak", "price": 95.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
       ]
     },
     {
-      "id": "2020",
+      "id": 10,
+      "route": "london",
       "origin": "London Euston",
-      "originCode": "EUS",
       "destination": "Manchester Piccadilly",
-      "destinationCode": "MAN",
-      "departure": "20:20",
-      "arrival": "22:35",
+      "departure": "16:13",
+      "arrival": "18:20",
       "platform": "14",
-      "callingPoints": ["Milton Keynes"],
+      "callingPoints": [],
       "fares": [
-        { "type": "advance", "class": "standard", "price": 35 },
-        { "type": "off_peak", "class": "standard", "price": 60 },
-        { "type": "anytime", "class": "standard", "price": 130 },
-        { "type": "advance", "class": "first", "price": 70 }
+        { "type": "advance", "price": 52.00, "class": "standard" },
+        { "type": "off_peak", "price": 95.00, "class": "standard" },
+        { "type": "anytime", "price": 120.00, "class": "standard" }
+      ]
+    },
+
+    {
+      "id": 101,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "07:05",
+      "arrival": "07:38",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom", "Guide Bridge"],
+      "fares": [
+        { "type": "advance", "price": 4.85, "class": "standard" },
+        { "type": "off_peak", "price": 6.85, "class": "standard" },
+        { "type": "anytime", "price": 9.85, "class": "standard" }
+      ]
+    },
+    {
+      "id": 102,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "07:35",
+      "arrival": "08:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Glossop line stations"],
+      "fares": [
+        { "type": "off_peak", "price": 6.95, "class": "standard" },
+        { "type": "anytime", "price": 9.95, "class": "standard" }
+      ]
+    },
+    {
+      "id": 103,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "08:05",
+      "arrival": "08:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom"],
+      "fares": [
+        { "type": "advance", "price": 5.15, "class": "standard" },
+        { "type": "off_peak", "price": 7.15, "class": "standard" },
+        { "type": "anytime", "price": 10.15, "class": "standard" }
+      ]
+    },
+    {
+      "id": 104,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "08:35",
+      "arrival": "09:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Guide Bridge"],
+      "fares": [
+        { "type": "off_peak", "price": 7.25, "class": "standard" },
+        { "type": "anytime", "price": 10.25, "class": "standard" }
+      ]
+    },
+    {
+      "id": 105,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "09:05",
+      "arrival": "09:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting"],
+      "fares": [
+        { "type": "advance", "price": 4.95, "class": "standard" },
+        { "type": "off_peak", "price": 6.75, "class": "standard" },
+        { "type": "anytime", "price": 9.75, "class": "standard" }
+      ]
+    },
+    {
+      "id": 106,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "09:35",
+      "arrival": "10:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom"],
+      "fares": [
+        { "type": "off_peak", "price": 6.65, "class": "standard" },
+        { "type": "anytime", "price": 9.65, "class": "standard" }
+      ]
+    },
+    {
+      "id": 107,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "10:05",
+      "arrival": "10:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting", "Guide Bridge"],
+      "fares": [
+        { "type": "advance", "price": 4.75, "class": "standard" },
+        { "type": "off_peak", "price": 6.55, "class": "standard" },
+        { "type": "anytime", "price": 9.55, "class": "standard" }
+      ]
+    },
+    {
+      "id": 108,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "10:35",
+      "arrival": "11:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom"],
+      "fares": [
+        { "type": "off_peak", "price": 6.60, "class": "standard" },
+        { "type": "anytime", "price": 9.60, "class": "standard" }
+      ]
+    },
+    {
+      "id": 109,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "11:05",
+      "arrival": "11:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting"],
+      "fares": [
+        { "type": "advance", "price": 4.70, "class": "standard" },
+        { "type": "off_peak", "price": 6.50, "class": "standard" },
+        { "type": "anytime", "price": 9.50, "class": "standard" }
+      ]
+    },
+    {
+      "id": 110,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "11:35",
+      "arrival": "12:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Guide Bridge"],
+      "fares": [
+        { "type": "off_peak", "price": 6.55, "class": "standard" },
+        { "type": "anytime", "price": 9.55, "class": "standard" }
+      ]
+    },
+    {
+      "id": 111,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "12:05",
+      "arrival": "12:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom"],
+      "fares": [
+        { "type": "advance", "price": 4.80, "class": "standard" },
+        { "type": "off_peak", "price": 6.60, "class": "standard" },
+        { "type": "anytime", "price": 9.60, "class": "standard" }
+      ]
+    },
+    {
+      "id": 112,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "12:35",
+      "arrival": "13:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting"],
+      "fares": [
+        { "type": "off_peak", "price": 6.50, "class": "standard" },
+        { "type": "anytime", "price": 9.50, "class": "standard" }
+      ]
+    },
+    {
+      "id": 113,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "13:05",
+      "arrival": "13:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting", "Guide Bridge"],
+      "fares": [
+        { "type": "advance", "price": 4.85, "class": "standard" },
+        { "type": "off_peak", "price": 6.65, "class": "standard" },
+        { "type": "anytime", "price": 9.65, "class": "standard" }
+      ]
+    },
+    {
+      "id": 114,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "13:35",
+      "arrival": "14:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom"],
+      "fares": [
+        { "type": "off_peak", "price": 6.70, "class": "standard" },
+        { "type": "anytime", "price": 9.70, "class": "standard" }
+      ]
+    },
+    {
+      "id": 115,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "14:05",
+      "arrival": "14:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting"],
+      "fares": [
+        { "type": "advance", "price": 4.90, "class": "standard" },
+        { "type": "off_peak", "price": 6.70, "class": "standard" },
+        { "type": "anytime", "price": 9.70, "class": "standard" }
+      ]
+    },
+    {
+      "id": 116,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "14:35",
+      "arrival": "15:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting", "Guide Bridge"],
+      "fares": [
+        { "type": "off_peak", "price": 6.75, "class": "standard" },
+        { "type": "anytime", "price": 9.75, "class": "standard" }
+      ]
+    },
+    {
+      "id": 117,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "15:05",
+      "arrival": "15:38",
+      "platform": "2",
+      "callingPoints": ["Hadfield", "Dinting", "Broadbottom"],
+      "fares": [
+        { "type": "advance", "price": 5.05, "class": "standard" },
+        { "type": "off_peak", "price": 6.95, "class": "standard" },
+        { "type": "anytime", "price": 9.95, "class": "standard" }
+      ]
+    },
+    {
+      "id": 118,
+      "route": "glossop",
+      "origin": "Glossop",
+      "destination": "Manchester Piccadilly",
+      "departure": "15:35",
+      "arrival": "16:08",
+      "platform": "1",
+      "callingPoints": ["Hadfield", "Dinting"],
+      "fares": [
+        { "type": "off_peak", "price": 7.05, "class": "standard" },
+        { "type": "anytime", "price": 10.05, "class": "standard" }
       ]
     }
   ]
