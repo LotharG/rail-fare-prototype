@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { CSSProperties } from "react";
 import data from "../data/journeys.json";
 import JourneyCard from "../components/JourneyCard";
 import { getCheapestFare } from "../lib/pricing";
@@ -20,11 +21,35 @@ function formatMoney(value: number) {
   return roundUpToNearest5p(value).toFixed(2);
 }
 
+type Journey = {
+  id: number;
+  route: string;
+  origin: string;
+  destination: string;
+  departure: string;
+  arrival: string;
+  platform: string;
+  callingPoints: string[];
+  fares: Array<{
+    type: string;
+    price: number;
+    class: string;
+  }>;
+};
+
+type BasketDetails = {
+  total: number;
+  activeFareType: string;
+  addFlex?: boolean;
+  addAnytime?: boolean;
+  addFirst?: boolean;
+};
+
 // ---------- component ----------
 export default function Home() {
-  const [view, setView] = useState("home");
-  const [selectedJourney, setSelectedJourney] = useState<any>(null);
-  const [basketDetails, setBasketDetails] = useState<any>(null);
+  const [view, setView] = useState<"home" | "list" | "basket">("home");
+  const [selectedJourney, setSelectedJourney] = useState<Journey | null>(null);
+  const [basketDetails, setBasketDetails] = useState<BasketDetails | null>(null);
   const [total, setTotal] = useState(0);
 
   const [searchConfig, setSearchConfig] = useState({
@@ -35,19 +60,19 @@ export default function Home() {
     railcardEligible: false
   });
 
-  const filteredJourneys = data.journeys.filter((j: any) =>
+  const filteredJourneys = (data.journeys as Journey[]).filter((j) =>
     searchConfig.routeKey ? j.route === searchConfig.routeKey : false
   );
 
   const cheapestPrice =
     filteredJourneys.length > 0
-      ? Math.min(...filteredJourneys.map((j: any) => getCheapestFare(j.fares).price))
+      ? Math.min(...filteredJourneys.map((j) => getCheapestFare(j.fares).price))
       : 0;
 
   const fastestDuration =
     filteredJourneys.length > 0
       ? Math.min(
-          ...filteredJourneys.map((j: any) =>
+          ...filteredJourneys.map((j) =>
             getDurationMinutes(j.departure, j.arrival)
           )
         )
@@ -205,7 +230,7 @@ export default function Home() {
 
         <p style={styles.subText}>{searchConfig.passengers}</p>
 
-        {filteredJourneys.map((journey: any) => {
+        {filteredJourneys.map((journey) => {
           const basePrice = getCheapestFare(journey.fares).price;
 
           return (
@@ -224,7 +249,7 @@ export default function Home() {
                   activeFareType: "advance"
                 });
               }}
-              onPriceChange={(d: any) => {
+              onPriceChange={(d: BasketDetails) => {
                 setTotal(d.total);
                 setBasketDetails(d);
               }}
@@ -238,7 +263,7 @@ export default function Home() {
 }
 
 // ---------- styles ----------
-const styles = {
+const styles: Record<string, CSSProperties> = {
   page: {
     background: "#f4f7fb",
     minHeight: "100vh",
@@ -253,7 +278,7 @@ const styles = {
 
   title: {
     fontSize: "30px",
-    fontWeight: "700",
+    fontWeight: 700,
     lineHeight: 1.2,
     color: "#0b1f3a",
     marginBottom: "16px"
@@ -274,7 +299,7 @@ const styles = {
   bodyText: {
     fontSize: "17px",
     lineHeight: 1.6,
-    marginTop: "0",
+    marginTop: 0,
     marginBottom: "12px"
   },
 
@@ -311,7 +336,7 @@ const styles = {
 
   total: {
     fontSize: "36px",
-    fontWeight: "800",
+    fontWeight: 800,
     lineHeight: 1.2,
     marginTop: "16px"
   },
@@ -328,7 +353,7 @@ const styles = {
     color: "white",
     border: "none",
     borderRadius: "10px",
-    fontWeight: "600",
+    fontWeight: 600,
     fontSize: "17px",
     lineHeight: 1.3,
     cursor: "pointer"
